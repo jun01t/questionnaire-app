@@ -203,6 +203,7 @@ Error code: 429 - insufficient_quota
 
 1. OpenAIのアカウントページでクレジット残高を確認
    - [OpenAI 請求設定ページ](https://platform.openai.com/account/billing)
+   - Usageページに何も表示されていない場合、無料枠を使い切っている可能性があります
 2. クレジットカードを登録する
 3. 使用量の上限を引き上げる
 4. 新しいAPIキーを取得する
