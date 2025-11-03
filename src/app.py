@@ -35,6 +35,7 @@ st.markdown("""
     }
     .question-box {
         background-color: #f0f2f6;
+        color: #1a1a1a;
         padding: 1.5rem;
         border-radius: 10px;
         margin: 1rem 0;
@@ -42,6 +43,7 @@ st.markdown("""
     }
     .answer-box {
         background-color: #e8f4f8;
+        color: #1a1a1a;
         padding: 1.5rem;
         border-radius: 10px;
         margin: 1rem 0;
@@ -49,6 +51,7 @@ st.markdown("""
     }
     .questionnaire-box {
         background-color: #fff;
+        color: #1a1a1a;
         padding: 2rem;
         border-radius: 10px;
         margin: 1rem 0;
