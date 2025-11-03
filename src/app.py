@@ -181,6 +181,8 @@ def main():
                         complete_button = True
                 except Exception as e:
                     st.error(f"エラーが発生しました: {str(e)}")
+            
+            st.rerun()
         
         # 問診票を完成させるボタンが押された場合
         if complete_button:
