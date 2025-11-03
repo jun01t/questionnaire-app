@@ -221,13 +221,34 @@ LangChain、Vercel AI SDK、n8nなどの外部サービス経由でOpenAI APIを
 
 ### APIキーが無効な場合
 
-APIキーが正しくない場合は、サイドバーから新しいキーを入力してください。
-また、`.env`ファイルに正しいキーが設定されているか確認してください。
+APIキーが正しいか確認する手順：
 
-```bash
-# .envファイルの内容を確認（注意: 内容が表示されます）
-cat .env
-```
+1. `.env`ファイルの内容を確認
+
+   ```bash
+   # .envファイルの内容を確認（注意: 内容が表示されます）
+   cat .env
+   ```
+
+2. APIキーの形式を確認
+
+   - 正しい形式: `sk-proj-...` または `sk-...` で始まる長い文字列
+   - OpenAI公式サイトから取得: [OpenAI API Keys](https://platform.openai.com/api-keys)
+
+3. APIキーの有効性を確認
+
+   - OpenAI Dashboardでキーの状態を確認
+   - 使用制限に達していないか確認
+
+4. 新しいキーを設定
+
+   - `.env`ファイルを編集
+   - またはStreamlitのサイドバーから直接入力
+   - Dockerを使用している場合は、コンテナを再起動
+
+   ```bash
+   docker compose restart
+   ```
 
 ## ⚠️ 注意事項
 
