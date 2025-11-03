@@ -159,11 +159,18 @@ def main():
                 height=150,
                 placeholder="回答をここに入力してください..."
             )
-            col1, col2 = st.columns([1, 5])
-            with col1:
-                submit_button = st.form_submit_button("送信", use_container_width=True)
-            with col2:
+            
+            # 質問数の上限に達しているかチェック
+            is_limit_reached = len(st.session_state.questions_asked) >= st.session_state.max_questions
+            
+            if is_limit_reached:
+                # 上限に達している場合は問診票を完成させるボタンのみ表示
                 complete_button = st.form_submit_button("問診票を完成させる", use_container_width=True)
+                submit_button = False
+            else:
+                # 上限に達していない場合は送信ボタンのみ表示
+                submit_button = st.form_submit_button("送信", use_container_width=True)
+                complete_button = False
         
         # 送信ボタンが押された場合
         if submit_button and answer:
