@@ -1,0 +1,20 @@
+services:
+  questionnaire-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: questionnaire-app
+    ports:
+      - "8501:8501"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    env_file:
+      - .env
+    volumes:
+      # 開発時にコードの変更を反映させる場合はコメントを外す
+      # - ./src:/app/src
+      - questionnaire-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  questionnaire-data:

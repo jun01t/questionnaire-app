@@ -1,11 +1,12 @@
 """問診票生成のロジック"""
 
 from langchain_openai import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain.memory import ConversationBufferMemory
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_community.chat_message_histories import ChatMessageHistory
+from langchain_core.messages import HumanMessage, AIMessage
 from typing import List, Dict, Optional
 import os
-from .prompts import (
+from prompts import (
     QUESTION_GENERATION_PROMPT,
     QUESTIONNAIRE_COMPLETION_PROMPT,
     QUESTIONNAIRE_SYSTEM_PROMPT
@@ -28,14 +29,11 @@ class QuestionnaireAgent:
             raise ValueError("OPENAI_API_KEY環境変数が設定されていません")
         
         self.llm = ChatOpenAI(
-            model_name=model_name,
+            model=model_name,
             temperature=temperature,
             api_key=api_key
         )
-        self.memory = ConversationBufferMemory(
-            return_messages=True,
-            memory_key="chat_history"
-        )
+        self.message_history = ChatMessageHistory()
         self.conversation_history: List[Dict[str, str]] = []
         self.is_complete = False
         
@@ -90,8 +88,8 @@ class QuestionnaireAgent:
             "answer": answer
         })
         
-        self.memory.chat_memory.add_user_message(f"質問: {last_question}")
-        self.memory.chat_memory.add_ai_message(f"回答: {answer}")
+        self.message_history.add_message(HumanMessage(content=f"質問: {last_question}"))
+        self.message_history.add_message(AIMessage(content=f"回答: {answer}"))
     
     def generate_complete_questionnaire(self) -> str:
         """
@@ -144,6 +142,6 @@ class QuestionnaireAgent:
     def reset(self) -> None:
         """問診票をリセット"""
         self.conversation_history = []
-        self.memory.clear()
+        self.message_history.clear()
         self.is_complete = False
 
