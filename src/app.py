@@ -71,6 +71,7 @@ def init_session_state():
             st.session_state.answers = []
             st.session_state.questionnaire_complete = False
             st.session_state.final_questionnaire = ""
+            st.session_state.max_questions = 10  # 質問の上限数
         except ValueError as e:
             st.error(f"エラー: {str(e)}")
             st.info("📝 サイドバーでOpenAI APIキーを設定してください。")
@@ -123,7 +124,7 @@ def main():
         
         st.divider()
         st.header("📊 問診の進行状況")
-        st.info(f"質問数: {len(st.session_state.questions_asked)}")
+        st.info(f"質問数: {len(st.session_state.questions_asked)} / {st.session_state.max_questions}")
         st.info(f"回答数: {len(st.session_state.answers)}")
         
         if st.session_state.questionnaire_complete:
@@ -169,18 +170,23 @@ def main():
             st.session_state.agent.add_answer(answer)
             st.session_state.answers.append(answer)
             
-            # 次の質問を取得
-            with st.spinner("次の質問を生成中..."):
-                try:
-                    next_question = st.session_state.agent.get_next_question()
-                    if next_question and "完成" not in next_question:
-                        st.session_state.current_question = next_question
-                        st.session_state.questions_asked.append(next_question)
-                    else:
-                        # 自動的に完成させる
-                        complete_button = True
-                except Exception as e:
-                    st.error(f"エラーが発生しました: {str(e)}")
+            # 質問数の上限をチェック
+            if len(st.session_state.questions_asked) >= st.session_state.max_questions:
+                st.warning(f"⚠️ 質問の上限（{st.session_state.max_questions}問）に達しました。自動的に問診票を完成します。")
+                complete_button = True
+            else:
+                # 次の質問を取得
+                with st.spinner("次の質問を生成中..."):
+                    try:
+                        next_question = st.session_state.agent.get_next_question()
+                        if next_question and "完成" not in next_question:
+                            st.session_state.current_question = next_question
+                            st.session_state.questions_asked.append(next_question)
+                        else:
+                            # 自動的に完成させる
+                            complete_button = True
+                    except Exception as e:
+                        st.error(f"エラーが発生しました: {str(e)}")
             
             st.rerun()
         
